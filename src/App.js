@@ -1,23 +1,35 @@
-import logo from './logo.svg';
+import React, {useState, useEffect} from 'react'
+
+import Forecast from './Components/Forcast'
+import SearchForm from './Components/SearchForm'
+
 import './App.css';
 
+
+
 function App() {
+  const [weather, setWeather] = useState(null)
+  const apiKey = 'f054411b9429491aff936bbcb29b69fd'
+
+  const getWeather = async (zipCode) => {
+    const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?zip=${zipCode},us&units=imperial&appid=${apiKey}`)
+    const data = await response.json()
+    setWeather(data)
+    // var sunrise = getTime(data.sys.sunrise)
+    // var sunset = getTime(data.sys.sunset)
+  }
+
+  // const getTime = (ms) => {
+  //   let longDate = new Date(ms*1000)
+  //   let time = longDate.toString().split(' ')[4]
+  //   return time
+  // }
+  
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <SearchForm getWeather={getWeather} />
+      <Forecast data={weather} />
     </div>
   );
 }
